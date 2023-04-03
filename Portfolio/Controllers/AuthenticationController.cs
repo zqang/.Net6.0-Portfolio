@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Portfolio.Models;
@@ -20,8 +21,9 @@ namespace Portfolio.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginRequest request)
+        public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
         {
             if (request.Username != "admin" || request.Password != "adminpassword")
             {
@@ -35,17 +37,19 @@ namespace Portfolio.Controllers
         private string GenerateToken()
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
-        {
-            new Claim(ClaimTypes.Name, "admin"),
-            new Claim(ClaimTypes.Role, "admin")
-        }),
+                {
+                    new Claim(ClaimTypes.Name, "admin"),
+                    new Claim(ClaimTypes.Role, "admin")
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Audience = _configuration["Jwt:Audience"],
+                Issuer = _configuration["Jwt:Issuer"]
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

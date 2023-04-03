@@ -12,13 +12,13 @@ namespace Portfolio.Models
         public DateTime UpdatedAt { get; set; }
     }
 
-    public class PortfolioDbContext : DbContext
-    {
-        public DbSet<BlogPost> BlogPosts { get; set; }
+    //public class PortfolioDbContext : DbContext
+    //{
+    //    public DbSet<BlogPost> BlogPosts { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("your_connection_string_here");
-        }
-    }
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //    {
+    //        optionsBuilder.UseSqlServer("your_connection_string_here");
+    //    }
+    //}
 }

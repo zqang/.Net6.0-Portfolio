@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Portfolio.Data;
 using Portfolio.Models;
 using System.Data;
 
 namespace Portfolio.Controllers
 {
     // BlogPostsController
-    [Authorize(Roles = "admin")]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BlogPostsController : ControllerBase
