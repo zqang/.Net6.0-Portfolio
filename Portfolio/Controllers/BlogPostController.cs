@@ -1,104 +1,76 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Portfolio.CommandsQueries;
 using Portfolio.Data;
+using Portfolio.Dtos;
 using Portfolio.Models;
 using System.Data;
 
 namespace Portfolio.Controllers
 {
-    // BlogPostsController
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BlogPostsController : ControllerBase
     {
-        private readonly PortfolioDbContext _context;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public BlogPostsController(PortfolioDbContext context)
+        public BlogPostsController(IMediator mediator, IMapper mapper)
         {
-            _context = context;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts()
+        public async Task<ActionResult<IEnumerable<BlogPostDto>>> GetBlogPosts()
         {
-            var blogPosts = await _context.BlogPosts.ToListAsync();
-
-            return blogPosts;
+            var query = new GetBlogPostsQuery();
+            var result = await _mediator.Send(query);
+            return _mapper.Map<IEnumerable<BlogPostDto>>(result).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPost>> GetBlogPost(int id)
+        public async Task<ActionResult<BlogPostDto>> Get(int id)
         {
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+            var query = new GetBlogPostQuery { Id = id };
+            var result = await _mediator.Send(query);
 
-            if (blogPost == null)
+            if (result == null)
             {
                 return NotFound();
             }
-
-            return blogPost;
+            return _mapper.Map<BlogPostDto>(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<BlogPost>> CreateBlogPost(BlogPost blogPost)
+        [ProducesResponseType(typeof(BlogPostDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<BlogPostDto>> Create(CreateBlogPostCommand command)
         {
-            _context.BlogPosts.Add(blogPost);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetBlogPost), new { id = blogPost.Id }, blogPost);
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, _mapper.Map<BlogPostDto>(result));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlogPost(int id, BlogPost blogPost)
+        public async Task<ActionResult<BlogPostDto>> Update(int id, UpdateBlogPostCommand command)
         {
-            if (id != blogPost.Id)
+            if (id != command.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(blogPost).State = EntityState.Modified;
-            blogPost.UpdatedAt = DateTime.UtcNow;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BlogPostExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var result = await _mediator.Send(command);
+            return _mapper.Map<BlogPostDto>(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlogPost(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var blogPost = await _context.BlogPosts.FindAsync(id);
-
-            if (blogPost == null)
-            {
-                return NotFound();
-            }
-
-            _context.BlogPosts.Remove(blogPost);
-            await _context.SaveChangesAsync();
-
+            var command = new DeleteBlogPostCommand { Id = id };
+            await _mediator.Send(command);
             return NoContent();
-        }
-
-        private bool BlogPostExists(int id)
-        {
-            return _context.BlogPosts.Any(e => e.Id == id);
         }
     }
 }
