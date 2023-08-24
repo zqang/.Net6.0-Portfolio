@@ -8,13 +8,15 @@ using Portfolio.Repositories;
 
 namespace Portfolio.Handlers
 {
-    public class DeleteBlogPostCommandHandler : IRequestHandler<DeleteBlogPostCommand>
+    public class DeleteBlogPostCommandHandler : IRequestHandler<DeleteBlogPostCommand, Unit>
     {
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IMapper _mapper;
 
-        public DeleteBlogPostCommandHandler(IBlogPostRepository blogPostRepository)
+        public DeleteBlogPostCommandHandler(IBlogPostRepository blogPostRepository, IMapper mapper)
         {
             _blogPostRepository = blogPostRepository;
+            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(DeleteBlogPostCommand request, CancellationToken cancellationToken)
@@ -29,11 +31,6 @@ namespace Portfolio.Handlers
             await _blogPostRepository.DeleteAsync(request.Id);
 
             return Unit.Value;
-        }
-
-        Task IRequestHandler<DeleteBlogPostCommand>.Handle(DeleteBlogPostCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 

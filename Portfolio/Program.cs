@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Portfolio.Data;
 using Portfolio.Portfolios;
 using Portfolio.Repositories;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +39,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Add services to the container.
-
+//builder.Services.AddHttpsRedirection(options =>
+//{
+//    options.HttpsPort = 5001;
+//    options.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
+//    options.ServerCertificate = new X509Certificate2("mycert.crt");
+//})
 
 builder.Services.AddControllers();
 

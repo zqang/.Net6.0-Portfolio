@@ -46,6 +46,7 @@ namespace Portfolio.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(typeof(BlogPostDto), StatusCodes.Status201Created)]
         public async Task<ActionResult<BlogPostDto>> Create(CreateBlogPostCommand command)
         {
@@ -53,7 +54,8 @@ namespace Portfolio.Controllers
             return CreatedAtAction(nameof(Get), new { id = result.Id }, _mapper.Map<BlogPostDto>(result));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Authorize]
         public async Task<ActionResult<BlogPostDto>> Update(int id, UpdateBlogPostCommand command)
         {
             if (id != command.Id)
@@ -65,7 +67,8 @@ namespace Portfolio.Controllers
             return _mapper.Map<BlogPostDto>(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             var command = new DeleteBlogPostCommand { Id = id };

@@ -3,7 +3,7 @@ using Portfolio.Dtos;
 
 namespace Portfolio.CommandsQueries
 {
-    public class DeleteBlogPostCommand : IRequest
+    public class DeleteBlogPostCommand : IRequest<Unit>
     {
         public int Id { get; set; }
     }

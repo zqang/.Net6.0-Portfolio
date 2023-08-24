@@ -31,7 +31,7 @@ namespace Portfolio.Controllers
             }
 
             var token = GenerateToken();
-            return token;
+            return Ok(new { token = token });
         }
 
         private string GenerateToken()
@@ -51,6 +51,16 @@ namespace Portfolio.Controllers
                 Audience = _configuration["Jwt:Audience"],
                 Issuer = _configuration["Jwt:Issuer"]
             };
+
+            //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSetting["JWT:Secret"]));
+            //var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            //var tokeOptions = new JwtSecurityToken(issuer: ConfigurationManager.AppSetting["JWT:ValidIssuer"], audience: ConfigurationManager.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(), expires: DateTime.Now.AddMinutes(6), signingCredentials: signinCredentials);
+            //var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            //return Ok(new JWTTokenResponse
+            //{
+            //    Token = tokenString
+            //});
+
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
