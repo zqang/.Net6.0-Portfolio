@@ -1,8 +1,8 @@
-﻿using Portfolio.Exceptions;
+﻿using PortfolioAPI.Exceptions;
 using System.Net;
 using System.Text.Json;
 
-namespace Portfolio.Configurations
+namespace PortfolioAPI.Configurations
 {
     public class GlobalErrorHandlingMiddleware
     {

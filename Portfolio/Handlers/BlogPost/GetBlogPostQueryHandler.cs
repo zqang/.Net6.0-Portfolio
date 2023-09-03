@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Portfolio.CommandsQueries;
-using Portfolio.Data;
-using Portfolio.Dtos;
-using Portfolio.Exceptions;
-using Portfolio.Models;
-using Portfolio.Repositories;
+using PortfolioAPI.Exceptions;
+using PortfolioAPI.Repositories;
+using PortfolioAPI.CommandsQueries;
+using PortfolioAPI.Data;
+using PortfolioAPI.Dtos;
+using PortfolioAPI.Models;
 
-namespace Portfolio.Handlers
+namespace PortfolioAPI.Handlers
 {
     public class GetBlogPostQueryHandler : IRequestHandler<GetBlogPostQuery, BlogPostDto>
     {

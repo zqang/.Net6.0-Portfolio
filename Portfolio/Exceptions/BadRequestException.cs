@@ -1,4 +1,4 @@
-﻿namespace Portfolio.Exceptions
+﻿namespace PortfolioAPI.Exceptions
 {
 
     public class BadRequestException : Exception

@@ -1,4 +1,4 @@
-﻿namespace Portfolio.Models
+﻿namespace PortfolioAPI.Models
 {
     public class LoginRequest
     {

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
-using Portfolio.CommandsQueries;
-using Portfolio.Dtos;
-using Portfolio.Exceptions;
-using Portfolio.Models;
-using Portfolio.Repositories;
+using PortfolioAPI.Dtos;
+using PortfolioAPI.Exceptions;
+using PortfolioAPI.CommandsQueries;
+using PortfolioAPI.Models;
+using PortfolioAPI.Repositories;
 
-namespace Portfolio.Handlers
+namespace PortfolioAPI.Handlers
 {
     public class DeleteBlogPostCommandHandler : IRequestHandler<DeleteBlogPostCommand, Unit>
     {

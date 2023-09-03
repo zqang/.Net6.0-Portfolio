@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Portfolio.Data;
-using Portfolio.Models;
+using PortfolioAPI.Data;
+using PortfolioAPI.Models;
 
-namespace Portfolio.Repositories
+namespace PortfolioAPI.Repositories
 {
     public class BlogPostRepository : IBlogPostRepository
     {

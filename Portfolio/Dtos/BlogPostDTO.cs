@@ -1,4 +1,4 @@
-﻿namespace Portfolio.Dtos
+﻿namespace PortfolioAPI.Dtos
 {
     public class BlogPostDto
     {

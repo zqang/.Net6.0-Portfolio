@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Portfolio.Models;
+using PortfolioAPI.Models;
 
-namespace Portfolio.Data
+namespace PortfolioAPI.Data
 {
     public class PortfolioDbContext : DbContext
     {
@@ -10,6 +10,7 @@ namespace Portfolio.Data
         }
 
         public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<Portfolio> Portfolios { get; set; }
         //public DbSet<Project> Projects { get; set; }
         //// Add other model DbSet properties here
 

@@ -1,4 +1,4 @@
-namespace Portfolio
+namespace PortfolioAPI
 {
     public class WeatherForecast
     {

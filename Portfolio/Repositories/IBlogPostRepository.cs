@@ -1,6 +1,6 @@
-﻿using Portfolio.Models;
+﻿using PortfolioAPI.Models;
 
-namespace Portfolio.Repositories
+namespace PortfolioAPI.Repositories
 {
     public interface IBlogPostRepository
     {

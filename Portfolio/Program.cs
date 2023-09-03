@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Portfolio.Configurations;
-using Portfolio.Data;
-using Portfolio.Portfolios;
-using Portfolio.Repositories;
+using PortfolioAPI.PortfolioMappers;
+using PortfolioAPI.Configurations;
+using PortfolioAPI.Data;
+using PortfolioAPI.Repositories;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -53,6 +53,7 @@ builder.Services.AddDbContext<PortfolioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 
 
 builder.Services.AddEndpointsApiExplorer();

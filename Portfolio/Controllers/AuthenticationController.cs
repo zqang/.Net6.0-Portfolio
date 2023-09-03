@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Portfolio.Models;
+using PortfolioAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Portfolio.Controllers
+namespace PortfolioAPI.Controllers
 {
     // AuthenticationController
     [ApiController]
@@ -31,7 +31,7 @@ namespace Portfolio.Controllers
             }
 
             var token = GenerateToken();
-            return Ok(new { token = token });
+            return Ok(new { token });
         }
 
         private string GenerateToken()

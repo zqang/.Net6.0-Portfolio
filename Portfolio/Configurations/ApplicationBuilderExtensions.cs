@@ -1,4 +1,4 @@
-﻿namespace Portfolio.Configurations
+﻿namespace PortfolioAPI.Configurations
 {
     public static class ApplicationBuilderExtensions
     {

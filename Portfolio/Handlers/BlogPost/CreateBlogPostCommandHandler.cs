@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Portfolio.CommandsQueries;
-using Portfolio.Data;
-using Portfolio.Dtos;
-using Portfolio.Models;
+using PortfolioAPI.CommandsQueries;
+using PortfolioAPI.Data;
+using PortfolioAPI.Dtos;
+using PortfolioAPI.Models;
 using Serilog;
 
-namespace Portfolio.Handlers
+namespace PortfolioAPI.Handlers
 {
     public class CreateBlogPostCommandHandler : IRequestHandler<CreateBlogPostCommand, BlogPostDto>
     {
@@ -34,7 +34,7 @@ namespace Portfolio.Handlers
                 // Log the inner exception
                 Log.Error(ex.InnerException, "An error occurred while saving the blog post.");
             }
-            
+
 
             return _mapper.Map<BlogPostDto>(blogPost);
         }

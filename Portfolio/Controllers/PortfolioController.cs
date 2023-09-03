@@ -13,50 +13,50 @@ namespace PortfolioAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BlogPostsController : ControllerBase
+    public class PortfoliosController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public BlogPostsController(IMediator mediator, IMapper mapper)
+        public PortfoliosController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostDto>>> GetBlogPosts()
+        public async Task<ActionResult<IEnumerable<PortfolioDto>>> GetPortfolios()
         {
-            var query = new GetBlogPostsQuery();
+            var query = new GetPortfoliosQuery();
             var result = await _mediator.Send(query);
-            return _mapper.Map<IEnumerable<BlogPostDto>>(result).ToList();
+            return _mapper.Map<IEnumerable<PortfolioDto>>(result).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPostDto>> Get(int id)
+        public async Task<ActionResult<PortfolioDto>> Get(int id)
         {
-            var query = new GetBlogPostQuery { Id = id };
+            var query = new GetPortfolioQuery { Id = id };
             var result = await _mediator.Send(query);
 
             if (result == null)
             {
                 return NotFound();
             }
-            return _mapper.Map<BlogPostDto>(result);
+            return _mapper.Map<PortfolioDto>(result);
         }
 
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(BlogPostDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<BlogPostDto>> Create(CreateBlogPostCommand command)
+        [ProducesResponseType(typeof(PortfolioDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<PortfolioDto>> Create(CreatePortfolioCommand command)
         {
             var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(Get), new { id = result.Id }, _mapper.Map<BlogPostDto>(result));
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, _mapper.Map<PortfolioDto>(result));
         }
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<BlogPostDto>> Update(int id, UpdateBlogPostCommand command)
+        public async Task<ActionResult<PortfolioDto>> Update(int id, UpdatePortfolioCommand command)
         {
             if (id != command.Id)
             {
@@ -64,14 +64,14 @@ namespace PortfolioAPI.Controllers
             }
 
             var result = await _mediator.Send(command);
-            return _mapper.Map<BlogPostDto>(result);
+            return _mapper.Map<PortfolioDto>(result);
         }
 
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult> Delete(int id)
         {
-            var command = new DeleteBlogPostCommand { Id = id };
+            var command = new DeletePortfolioCommand { Id = id };
             await _mediator.Send(command);
             return NoContent();
         }
