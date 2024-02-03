@@ -1,6 +1,6 @@
 ## Personal Website built using .Net Core Web API version 6.0 and Angular 13.
 
-### Frontend 
+### Frontend (https://github.com/zqang/Angular-Portfolio)
 - state management using ngxs module, css library using ng zorro and markdown editor using Ckeeditor.
 - isolate the viewer and admin page with auth guard using secret authentication page and jwt token retrieve from backend.   
 - create CRUD Blog and Portfolio page with auth guard for create, update and delete page inside the admin dashboard layout.
