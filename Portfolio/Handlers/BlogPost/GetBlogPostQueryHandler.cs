@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PortfolioAPI.Exceptions;
-using PortfolioAPI.Repositories;
+using PortfolioAPI.Data.Repositories;
 using PortfolioAPI.CommandsQueries;
 using PortfolioAPI.Data;
 using PortfolioAPI.Dtos;

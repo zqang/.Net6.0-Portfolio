@@ -8,10 +8,10 @@ using Microsoft.OpenApi.Models;
 using PortfolioAPI.PortfolioMappers;
 using PortfolioAPI.Configurations;
 using PortfolioAPI.Data;
-using PortfolioAPI.Repositories;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using PortfolioAPI.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +50,10 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddDbContext<PortfolioDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder =>
+    {
+        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+    }));
 
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
@@ -102,13 +105,15 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestWebApi"); });
+    app.UseSwaggerUI(c => { 
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PortfolioAPI"); 
+});
 
-}
+//}
 
 app.UseHttpsRedirection();
 

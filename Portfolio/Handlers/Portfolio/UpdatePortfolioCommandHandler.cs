@@ -4,7 +4,7 @@ using PortfolioAPI.Exceptions;
 using PortfolioAPI.CommandsQueries;
 using PortfolioAPI.Dtos;
 using PortfolioAPI.Models;
-using PortfolioAPI.Repositories;
+using PortfolioAPI.Data.Repositories;
 
 namespace PortfolioAPI.Handlers
 {

@@ -2,7 +2,7 @@
 using PortfolioAPI.Data;
 using PortfolioAPI.Models;
 
-namespace PortfolioAPI.Repositories
+namespace PortfolioAPI.Data.Repositories
 {
     public class BlogPostRepository : IBlogPostRepository
     {
