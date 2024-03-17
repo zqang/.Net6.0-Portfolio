@@ -8,6 +8,7 @@ namespace PortfolioAPI.Data.Repositories.Tag
         Task<TagModel?> GetByIdAsync(Guid tagId);
         Task<ICollection<TagModel>> GetByIdsAsync(IEnumerable<Guid> tagIds, CancellationToken cancellationToken);
         Task<List<TagModel>> GetByPostIdAsync(Guid postId);
+        Task<TagModel?> GetByNameAsync(string name, CancellationToken cancellationToken);
         Task DeleteAsync(Guid tagId);
         Task UpdateAsync(TagModel tag);
         Task AddAsync(TagModel tag);

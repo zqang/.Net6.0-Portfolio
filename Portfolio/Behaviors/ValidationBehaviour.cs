@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using ValidationException = PortfolioAPI.BuildingBlocks.ValidationException;
+using ValidationException = PortfolioAPI.Exceptions.ValidationException;
 
 namespace PortfolioAPI.BuildingBlocks;
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>

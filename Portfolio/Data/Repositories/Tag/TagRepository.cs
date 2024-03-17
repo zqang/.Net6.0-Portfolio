@@ -36,6 +36,11 @@ namespace PortfolioAPI.Data.Repositories.Tag
             return tags;
         }
 
+        public async Task<TagModel?> GetByNameAsync(string name, CancellationToken cancellationToken)
+        {
+            return await _context.Tags.FirstOrDefaultAsync(t => t.Name == name, cancellationToken: cancellationToken);
+        }
+
         public async Task DeleteAsync(Guid tagId)
         {
             var tag = await _context.Tags.FindAsync(tagId);

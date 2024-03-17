@@ -25,6 +25,7 @@ using PortfolioAPI;
 using PortfolioAPI.BuildingBlocks;
 using MediatR;
 using FluentValidation;
+using PortfolioAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -139,6 +140,8 @@ var app = builder.Build();
 });
 
 //}
+
+//app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

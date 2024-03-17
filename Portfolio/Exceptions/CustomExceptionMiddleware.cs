@@ -1,33 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortfolioAPI.Exceptions;
-using System.Net;
-using System.Text.Json;
 
-namespace PortfolioAPI.Configurations
+namespace PortfolioAPI.Middleware
 {
-    public class GlobalErrorHandlingMiddleware
+    public class CustomExceptionMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly Dictionary<Type, Func<HttpContext, Exception, Task>> _exceptionHandlers;
-
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        private readonly RequestDelegate _requestDelegate;
+        public CustomExceptionMiddleware(RequestDelegate requestDelegate)
         {
+            // Register known exception types and handlers.
             _exceptionHandlers = new()
             {
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
-                { typeof(ArgumentNullException), HandleForArgumentNullException },
             };
-            _next = next;
+            _requestDelegate = requestDelegate;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await _requestDelegate(context);
             }
             catch (Exception ex)
             {
@@ -35,11 +32,11 @@ namespace PortfolioAPI.Configurations
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            if (_exceptionHandlers.ContainsKey(exception.GetType()))
+            if (_exceptionHandlers.ContainsKey(ex.GetType()))
             {
-                await _exceptionHandlers[exception.GetType()].Invoke(context, exception);
+                await _exceptionHandlers[ex.GetType()].Invoke(context, ex);
             }
             else
             {
@@ -103,21 +100,6 @@ namespace PortfolioAPI.Configurations
                 Status = StatusCodes.Status403Forbidden,
                 Title = "Forbidden",
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
-            });
-        }
-
-        private async Task HandleForArgumentNullException(HttpContext httpContext, Exception ex)
-        {
-            var exception = (ArgumentNullException)ex;
-
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            await httpContext.Response.WriteAsJsonAsync(new ProblemDetails()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-                Title = "Argument null exception",
-                Detail = exception.Message
             });
         }
     }

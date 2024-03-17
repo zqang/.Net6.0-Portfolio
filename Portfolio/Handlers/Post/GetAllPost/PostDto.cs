@@ -2,7 +2,7 @@
 {
     public class PostDto
     {
-        public Guid Id { get; set; }
+        public Guid PostID { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public string VideoURL { get; set; } // Optional, depending on post types

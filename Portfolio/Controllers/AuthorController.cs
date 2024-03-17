@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioAPI.Handlers.Author.CreateAuthor;
 using PortfolioAPI.Handlers.Author.DeleteAuthor;
-using PortfolioAPI.Handlers.Post.GetAllPost;
+using PortfolioAPI.Handlers.Author.GetAllAuthor;
 using PortfolioAPI.Request.Author;
 
 namespace PortfolioAPI.Controllers;
@@ -19,10 +19,10 @@ public class AuthorController : ControllerBase
     }
 
     [HttpGet("")]
-    [ProducesResponseType(typeof(List<PostDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<AuthorDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAuthors()
     {
-        var posts = await _mediator.Send(new GetAllPostsQuery());
+        var posts = await _mediator.Send(new GetAllAuthorQuery());
 
         return Ok(posts);
     }
@@ -42,11 +42,11 @@ public class AuthorController : ControllerBase
     }
 
 
-    [HttpDelete("{postId}")]
+    [HttpDelete("{authorId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteAuthor(Guid postId)
+    public async Task<IActionResult> DeleteAuthor(Guid authorId)
     {
-        await _mediator.Send(new DeleteAuthorCommand(postId));
+        await _mediator.Send(new DeleteAuthorCommand(authorId));
         return Ok();
     }
 }

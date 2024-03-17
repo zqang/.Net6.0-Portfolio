@@ -5,7 +5,7 @@ namespace PortfolioAPI.Handlers.Author.DeleteAuthor
 {
     public class DeleteAuthorCommandHandler : ICommandHandler<DeleteAuthorCommand>
     {
-        private IAuthorRepository _authorRepository;
+        private readonly IAuthorRepository _authorRepository;
         public async Task Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
         {
             var author = await _authorRepository.GetByIdAsync(request.Id);

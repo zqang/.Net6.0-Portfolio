@@ -2,6 +2,7 @@
 {
     public class Author
     {
+        public Author() { }
         public Author(Guid authorId, Guid userId, string name, string bio) 
         { 
             AuthorID = authorId;

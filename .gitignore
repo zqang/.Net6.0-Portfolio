@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Portfolio/My guid data and insert data.txt
+/Portfolio/BlogNotebook.ipynb

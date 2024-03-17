@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PortfolioAPI.CommandsQueries;
 using PortfolioAPI.CommandsQueries.Post;
+using PortfolioAPI.Handlers.Post.CreatePost;
+using PortfolioAPI.Handlers.Post.DeletePost;
 using PortfolioAPI.Handlers.Post.GetAllPost;
+using PortfolioAPI.Handlers.Post.UpdatePost;
 using PortfolioAPI.Request.Post;
 
 namespace PortfolioAPI.Controllers

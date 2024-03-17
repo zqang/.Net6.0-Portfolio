@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace PortfolioAPI.BuildingBlocks;
+namespace PortfolioAPI.Exceptions;
 public class ValidationException : Exception
 {
     public ValidationException()
