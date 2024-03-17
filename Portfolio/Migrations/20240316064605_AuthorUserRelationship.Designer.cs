@@ -12,8 +12,8 @@ using PortfolioAPI.Data;
 namespace PortfolioAPI.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    [Migration("20240314143317_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240316064605_AuthorUserRelationship")]
+    partial class AuthorUserRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.Author", b =>
                 {
-                    b.Property<int>("AuthorID")
+                    b.Property<Guid>("AuthorID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Bio")
                         .IsRequired()
@@ -52,7 +50,13 @@ namespace PortfolioAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("AuthorID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("Authors");
                 });
@@ -86,11 +90,9 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.Comment", b =>
                 {
-                    b.Property<int>("CommentID")
+                    b.Property<Guid>("CommentID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AuthorEmail")
                         .IsRequired()
@@ -107,12 +109,12 @@ namespace PortfolioAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentCommentID")
+                    b.Property<Guid?>("ParentCommentID")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PostID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -153,14 +155,12 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.Post", b =>
                 {
-                    b.Property<int>("PostID")
+                    b.Property<Guid>("PostID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostID"));
-
-                    b.Property<int>("AuthorID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AuthorID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("AverageRating")
                         .HasColumnType("float");
@@ -206,14 +206,14 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.Reaction", b =>
                 {
-                    b.Property<int>("ReactionID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReactionID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PostID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
@@ -235,11 +235,9 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.Tag", b =>
                 {
-                    b.Property<int>("TagID")
+                    b.Property<Guid>("TagID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TagDescription")
                         .IsRequired()
@@ -256,11 +254,9 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.User", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<Guid>("UserID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -298,17 +294,28 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PostTag", b =>
                 {
-                    b.Property<int>("PostsPostID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PostsPostID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TagsTagID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TagsTagID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("PostsPostID", "TagsTagID");
 
                     b.HasIndex("TagsTagID");
 
                     b.ToTable("PostTag", (string)null);
+                });
+
+            modelBuilder.Entity("PortfolioAPI.Models.Author", b =>
+                {
+                    b.HasOne("PortfolioAPI.Models.User", "User")
+                        .WithOne("Author")
+                        .HasForeignKey("PortfolioAPI.Models.Author", "UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PortfolioAPI.Models.Comment", b =>
@@ -389,6 +396,9 @@ namespace PortfolioAPI.Migrations
 
             modelBuilder.Entity("PortfolioAPI.Models.User", b =>
                 {
+                    b.Navigation("Author")
+                        .IsRequired();
+
                     b.Navigation("Reactions");
                 });
 #pragma warning restore 612, 618

@@ -12,6 +12,19 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using PortfolioAPI.Data.Repositories;
+using PortfolioAPI.Data.Repositories.Post;
+using PortfolioAPI.Data.Repositories.Author;
+using PortfolioAPI.Data.Repositories.Comment;
+using PortfolioAPI.Data.Repositories.Tag;
+using PortfolioAPI.Data.Repositories.Reactions;
+using PortfolioAPI.Data.Repositories.User;
+using PortfolioAPI.BuildingBlocks.Commands;
+using PortfolioAPI.BuildingBlocks.Validators;
+using Microsoft.SqlServer.Management.Smo.Wmi;
+using PortfolioAPI;
+using PortfolioAPI.BuildingBlocks;
+using MediatR;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +61,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
 builder.Services.AddDbContext<PortfolioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), builder =>
@@ -55,8 +69,15 @@ builder.Services.AddDbContext<PortfolioDbContext>(options =>
         builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
     }));
 
+
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -90,7 +111,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+}) ;
 
 builder.Services.AddCors(options =>
 {

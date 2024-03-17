@@ -12,21 +12,21 @@ namespace PortfolioAPI.Data.Repositories.Post
         {
             this._dbContext = dbContext;
         }
-        public async Task<Models.Post?> GetByAuthorIdAsync(int authorId) => await _dbContext.Posts.Where(p => p.AuthorID == authorId).FirstOrDefaultAsync();
+        public async Task<Models.Post?> GetByAuthorIdAsync(Guid authorId) => await _dbContext.Posts.Where(p => p.AuthorID == authorId).FirstOrDefaultAsync();
 
-        public async Task<Models.Post?> GetByIdAsync(int id) => await _dbContext.Posts.FindAsync(id);
+        public async Task<Models.Post?> GetByIdAsync(Guid id) => await _dbContext.Posts.FindAsync(id);
 
-        public async Task<List<Models.Post>> GetByTagIdAsync(int tagId) => await _dbContext.Posts
+        public async Task<List<Models.Post>> GetByTagIdAsync(Guid tagId) => await _dbContext.Posts
             .Where(p => p.Tags.Any(t => t.TagID == tagId))
             .ToListAsync();
 
         public async Task AddAsync(Models.Post post)
         {
-            _dbContext.Add(post);
+            _dbContext.Posts.Add(post);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var post = await GetByIdAsync(id);
             if (post != null)

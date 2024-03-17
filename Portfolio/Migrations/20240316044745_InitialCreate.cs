@@ -15,8 +15,7 @@ namespace PortfolioAPI.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    AuthorID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -63,8 +62,7 @@ namespace PortfolioAPI.Migrations
                 name: "Tags",
                 columns: table => new
                 {
-                    TagID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TagName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TagDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -77,8 +75,7 @@ namespace PortfolioAPI.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -96,12 +93,11 @@ namespace PortfolioAPI.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    PostID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VideoURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuthorID = table.Column<int>(type: "int", nullable: false),
+                    AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ViewsCount = table.Column<int>(type: "int", nullable: false),
@@ -125,15 +121,14 @@ namespace PortfolioAPI.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    CommentID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PostID = table.Column<int>(type: "int", nullable: false),
+                    CommentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ParentCommentID = table.Column<int>(type: "int", nullable: false)
+                    ParentCommentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,8 +151,8 @@ namespace PortfolioAPI.Migrations
                 name: "PostTag",
                 columns: table => new
                 {
-                    PostsPostID = table.Column<int>(type: "int", nullable: false),
-                    TagsTagID = table.Column<int>(type: "int", nullable: false)
+                    PostsPostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagsTagID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,9 +175,9 @@ namespace PortfolioAPI.Migrations
                 name: "Reactions",
                 columns: table => new
                 {
-                    ReactionID = table.Column<int>(type: "int", nullable: false),
-                    PostID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ReactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReactionType = table.Column<int>(type: "int", nullable: false),
                     ReactionAmounts = table.Column<int>(type: "int", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false)

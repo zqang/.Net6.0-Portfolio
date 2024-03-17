@@ -4,9 +4,9 @@ namespace PortfolioAPI.Data.Repositories.Post
 {
     public interface IPostRepository
     {
-        public Task<PostModel?> GetByIdAsync(int id);
-        public Task<PostModel?> GetByAuthorIdAsync(int authorId);
-        public Task<List<PostModel>> GetByTagIdAsync(int tagId);
+        public Task<PostModel?> GetByIdAsync(Guid id);
+        public Task<PostModel?> GetByAuthorIdAsync(Guid authorId);
+        public Task<List<PostModel>> GetByTagIdAsync(Guid tagId);
 
         public Task<List<PostModel>> GetAllAsync();
 
@@ -14,6 +14,6 @@ namespace PortfolioAPI.Data.Repositories.Post
 
         public Task UpdateAsync(PostModel post);
 
-        public Task DeleteAsync(int id);
+        public Task DeleteAsync(Guid id);
     }
 }

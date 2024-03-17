@@ -22,6 +22,19 @@ namespace PortfolioAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .HasOne(a => a.Author)
+                .WithOne(a => a.User)
+                .HasForeignKey<Author>(a => a.UserID)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Author>()
+                .HasOne(a => a.User)
+                .WithOne(a => a.Author)
+                .HasForeignKey<Author>(a => a.UserID)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
+
             modelBuilder.Entity<Author>()
                 .HasMany(a => a.Posts)
                 .WithOne(p => p.Author)
@@ -31,7 +44,7 @@ namespace PortfolioAPI.Data
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Tags)
                 .WithMany(t => t.Posts)
-                .UsingEntity(j => j.ToTable("PostTag"));
+                .UsingEntity<PostTag>(j => j.Property(e => e.CreatedOn).HasDefaultValueSql("CURRENT_TIMESTAMP"));
 
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Comments)

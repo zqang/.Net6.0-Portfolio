@@ -2,7 +2,7 @@
 {
     public class User
     {
-        public int UserID { get; set; } // Primary Key
+        public Guid UserID { get; set; } // Primary Key
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; } // Encrypted
@@ -11,6 +11,7 @@
         public string Status { get; set; }
         public string Role { get; set; }
 
+        public Author Author { get; set; }
         public ICollection<Reaction> Reactions { get; } = new List<Reaction>();
     }
 }
