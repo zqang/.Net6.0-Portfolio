@@ -5,8 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>2c17c410-5100-44e5-8f79-434e271f8f4a</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <!--<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>-->
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations-bk2\**" />
+    <Content Remove="Migrations-bk2\**" />
+    <EmbeddedResource Remove="Migrations-bk2\**" />
+    <None Remove="Migrations-bk2\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

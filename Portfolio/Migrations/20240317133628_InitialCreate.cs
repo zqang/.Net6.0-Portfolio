@@ -12,22 +12,6 @@ namespace PortfolioAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Authors",
-                columns: table => new
-                {
-                    AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Authors", x => x.AuthorID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BlogPosts",
                 columns: table => new
                 {
@@ -63,8 +47,8 @@ namespace PortfolioAPI.Migrations
                 columns: table => new
                 {
                     TagID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TagDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,6 +71,28 @@ namespace PortfolioAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Authors",
+                columns: table => new
+                {
+                    AuthorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.AuthorID);
+                    table.ForeignKey(
+                        name: "FK_Authors_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -151,21 +157,22 @@ namespace PortfolioAPI.Migrations
                 name: "PostTag",
                 columns: table => new
                 {
-                    PostsPostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagsTagID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PostID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostTag", x => new { x.PostsPostID, x.TagsTagID });
+                    table.PrimaryKey("PK_PostTag", x => new { x.PostID, x.TagID });
                     table.ForeignKey(
-                        name: "FK_PostTag_Posts_PostsPostID",
-                        column: x => x.PostsPostID,
+                        name: "FK_PostTag_Posts_PostID",
+                        column: x => x.PostID,
                         principalTable: "Posts",
                         principalColumn: "PostID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostTag_Tags_TagsTagID",
-                        column: x => x.TagsTagID,
+                        name: "FK_PostTag_Tags_TagID",
+                        column: x => x.TagID,
                         principalTable: "Tags",
                         principalColumn: "TagID",
                         onDelete: ReferentialAction.Cascade);
@@ -200,6 +207,12 @@ namespace PortfolioAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Authors_UserID",
+                table: "Authors",
+                column: "UserID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ParentCommentID",
                 table: "Comments",
                 column: "ParentCommentID");
@@ -215,9 +228,9 @@ namespace PortfolioAPI.Migrations
                 column: "AuthorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostTag_TagsTagID",
+                name: "IX_PostTag_TagID",
                 table: "PostTag",
-                column: "TagsTagID");
+                column: "TagID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reactions_PostID",
@@ -261,10 +274,10 @@ namespace PortfolioAPI.Migrations
                 name: "Posts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Users");
         }
     }
 }

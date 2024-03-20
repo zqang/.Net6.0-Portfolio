@@ -12,8 +12,8 @@ using PortfolioAPI.Data;
 namespace PortfolioAPI.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    [Migration("20240316064605_AuthorUserRelationship")]
-    partial class AuthorUserRelationship
+    [Migration("20240317133628_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -204,6 +204,26 @@ namespace PortfolioAPI.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("PortfolioAPI.Models.PostTag", b =>
+                {
+                    b.Property<Guid>("PostID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("PostID", "TagID");
+
+                    b.HasIndex("TagID");
+
+                    b.ToTable("PostTag");
+                });
+
             modelBuilder.Entity("PortfolioAPI.Models.Reaction", b =>
                 {
                     b.Property<Guid>("ReactionID")
@@ -239,11 +259,11 @@ namespace PortfolioAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TagDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TagName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -292,21 +312,6 @@ namespace PortfolioAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PostTag", b =>
-                {
-                    b.Property<Guid>("PostsPostID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsTagID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("PostsPostID", "TagsTagID");
-
-                    b.HasIndex("TagsTagID");
-
-                    b.ToTable("PostTag", (string)null);
-                });
-
             modelBuilder.Entity("PortfolioAPI.Models.Author", b =>
                 {
                     b.HasOne("PortfolioAPI.Models.User", "User")
@@ -348,6 +353,21 @@ namespace PortfolioAPI.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("PortfolioAPI.Models.PostTag", b =>
+                {
+                    b.HasOne("PortfolioAPI.Models.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PortfolioAPI.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PortfolioAPI.Models.Reaction", b =>
                 {
                     b.HasOne("PortfolioAPI.Models.Post", "Post")
@@ -365,21 +385,6 @@ namespace PortfolioAPI.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PostTag", b =>
-                {
-                    b.HasOne("PortfolioAPI.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsPostID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortfolioAPI.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsTagID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PortfolioAPI.Models.Author", b =>
